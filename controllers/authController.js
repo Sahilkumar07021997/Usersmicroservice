@@ -28,7 +28,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
 // Login user => /api/v1/login
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
-
+// debugger
     const { email, password } = req.body;
 
     //check is email and password is enteres by user
@@ -50,7 +50,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
         //unauthorized user-401
     }
 
-    sendToken(user, 200, res);
+    return sendToken(user, 200, res);
 })
 
 //Forgot password => /api/v1/password/forgot
@@ -100,7 +100,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 //Reset password => /api/v1/password/reset/:token
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
     //console.log(req)
-    debugger;
+    // debugger;
     //so first step is to hash the token present in Req.params.token and compare it with the one which is in the DB 
     const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
 
