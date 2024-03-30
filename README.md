@@ -18,8 +18,8 @@ npm install
 locally --> npm start
 
 using docker -->
-docker build -t usermicroservice:latest .
-docker-compose up -d
+--> docker build -t usermicroservice:latest .
+--> docker-compose up -d
 
 ## Contributing
 
