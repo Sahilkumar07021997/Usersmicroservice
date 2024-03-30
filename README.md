@@ -1,4 +1,4 @@
-# USER MICROSERVICE - CLINIC APPOINTMENT SYSTEM
+# USERS MICROSERVICE - CLINIC APPOINTMENT SYSTEM
 
 User microservice for the clinic appointment system
 
