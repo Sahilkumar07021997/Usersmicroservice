@@ -1,0 +1,23 @@
+# Dependency directories
+node_modules/
+
+
+# Log files
+logs/
+*.log
+
+# OS or editor files
+.DS_Store
+Thumbs.db
+
+# Compiled files (if using TypeScript, Babel, etc.)
+/dist
+/build
+
+# Editor-specific files
+.vscode/
+.idea/
+
+# Dependency lock files
+package-lock.json
+
