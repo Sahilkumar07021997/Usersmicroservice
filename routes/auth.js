@@ -6,6 +6,7 @@ const { registerUser,
     forgotPassword,
     resetPassword,
     logout,
+    getAllUsers,
     getUserProfile,
     updatePassword,
     updateprofile, 
@@ -23,7 +24,8 @@ router.route('/password/forgot').post(forgotPassword);
 router.route('/password/reset/:token').put(resetPassword);
 router.route('/me').get(isAuthenticatedUser, getUserProfile);
 router.route('/password/update').put(isAuthenticatedUser, updatePassword);
-router.route('/me/update').put(isAuthenticatedUser,updateprofile);
+router.route('/me/update').put(isAuthenticatedUser, updateprofile);
+router.route('/users').get(isAuthenticatedUser,getAllUsers);
 router.route('/logout').get(logout);
 
 router.route('/admin/users').get(isAuthenticatedUser,authorizeRoles('admin'),allUsers);

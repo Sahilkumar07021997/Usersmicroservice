@@ -11,12 +11,13 @@ const crypto = require('crypto');
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     //debugger;
     try {
-        const { name, email, password } = req.body;
-
+        const { name, email, password, role } = req.body;
+ 
         const user = await User.create({
             name,
             email,
-            password
+            password,
+            role
         })
     
         sendToken(user, 200, res);
@@ -24,7 +25,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
        return next (new ErrorHandler(error,500))
     }
     
-})
+}) 
 
 // Login user => /api/v1/login
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
@@ -78,7 +79,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     try {
         await sendEmail({
             email: user.email,
-            subject: 'ShopIt Password Recovery mail',
+            subject: 'Password Recovery mail',
             message
         })
         res.status(200).json({
@@ -190,6 +191,19 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
         message: 'User logged out!'
     })
 })
+
+// Get all users => /api/v1/users
+exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
+    // All users where role is not "admin"
+    const users = await User.find({ role: { $ne: "admin" } });
+
+    res.status(200).json({
+        success: true,
+        count: users.length,
+        users
+    });
+});
+
 
 //ADMIN ROUTES ----------------------------------------------------------------
 

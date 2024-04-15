@@ -1,16 +1,21 @@
-const mongoose = require('mongoose');
-
+const mongoose = require("mongoose");
+const MONGODB_URI = `mongodb://mongodb:27017/ClinicAppointmentSystem`; // Update to use the service name of the MongoDB container
 
 const connectDatabase = () => {
-    mongoose.set('strictQuery', false); //used to avoiding one warning!
-    mongoose.connect(process.env.DB_CONTAINER_URI, {
-        dbName: process.env.DB_NAME, // Specify the database name here
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    }).then(con => {
-        console.log(`MongoDB Database connected with HOST: ${con.connection.host}`)
+  mongoose.set("strictQuery", false); // Used to avoid one warning
+  mongoose
+    .connect(MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     })
-}
+    .then((con) => {
+      console.log(
+        `MongoDB Database connected with HOST: ${con.connection.host}`
+      );
+    })
+    .catch((err) => {
+      console.error("MongoDB connection error:", err);
+    });
+};
 
-
-module.exports = connectDatabase
+module.exports = connectDatabase;

@@ -23,8 +23,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //import all routes
 const auth = require('./routes/auth');
+const consultations = require('./routes/consultations');
+const appointments = require('./routes/appointments');
 
 app.use('/api/v1', auth);
+app.use('/api/v1/consultations', consultations);
+app.use('/api/v1/appointments', appointments);
+
 
 // if (process.env.NODE_ENV === 'PRODUCTION') { //on production mode it will pick up the build file ie. index.html and can run without running the frontend on localhost 4000
 //     //Both servers will run on http://localhost:4000/

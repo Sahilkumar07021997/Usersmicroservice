@@ -24,9 +24,9 @@ const userSchema = new mongoose.Schema({  //----> creating user schema ---->
         minlength: [6, 'your password must be at least 6 characters'],
         select:false
     },
-    role: { //whether its user or admin
+    role: { //whether its doctor, patient or admin
         type: String,
-        default: 'user'
+        default: 'patient'
     },
     createdAt: {
         type: Date,

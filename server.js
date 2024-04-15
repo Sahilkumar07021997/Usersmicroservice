@@ -35,6 +35,7 @@ app.get("/health", (req, res) => {
   res.send("User MicroService is running! 🏆");
 });
 
+//USERS microservice
 app.listen(process.env.PORT, () => {
   console.log(
     `User microservice started succesfully on PORT: ${process.env.PORT} in ${process.env.NODE_ENV} mode by ${process.env.DEVELOPER}😎`
