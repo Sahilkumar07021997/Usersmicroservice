@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   usermicroservice:
-    image: usermicroservice:latest
+    image: sahilkumardhiman007/usermicroservice:latest
     container_name: usermicroservice
     ports:
       - "5000:5000"
@@ -10,6 +10,8 @@ services:
       - mongodb
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/ClinicAppointmentSystem
+      - CONSULTATIONS_URL=http://localhost:8083
+      - APPOINTMENTS_URL=http://localhost:8082
     networks:
       - app_net
 

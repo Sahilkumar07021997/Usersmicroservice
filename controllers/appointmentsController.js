@@ -2,6 +2,7 @@ const User = require('../models/user');
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const axios = require('axios');
+const url = process.env.APPOINTMENTS_URL;
 //----------------------------------------------------------------//
 
 
@@ -9,7 +10,7 @@ const axios = require('axios');
 
 exports.listAppointments = catchAsyncErrors(async (req, res, next) => {
     try {
-        const response = await axios.get('http://localhost:8082/appointments/list');
+        const response = await axios.get(`${url}/appointments/list`);
 
         const appointments = response.data;
         res.status(200).json({ success: true, appointments });
@@ -28,7 +29,7 @@ exports.saveAppointments = catchAsyncErrors(async (req, res, next) => {
         const { doctorName, patientName, age, mobileNo, address,
             appointmentDate, appointmentTime, appointmentForDescription} = req.body;
  
-        const response = await axios.post(`http://localhost:8082/appointments/save`, {
+        const response = await axios.post(`${url}/appointments/save`, {
             doctorName, patientName, age, mobileNo, address,
             appointmentDate, appointmentTime, appointmentForDescription
         });
