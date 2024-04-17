@@ -7,15 +7,15 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - mongodb
+      - mongodb_service
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/ClinicAppointmentSystem
-      - CONSULTATIONS_URL=http://localhost:8083
-      - APPOINTMENTS_URL=http://localhost:8082
+      - MONGODB_URI=mongodb://mongodb_service:27017/ClinicAppointmentSystem
+      - CONSULTATIONS_URL=http://consultation-ms:8083
+      - APPOINTMENTS_URL=http://appointment-ms:8082
     networks:
       - app_net
 
-  mongodb:
+  mongodb_service:
     image: mongo:latest
     container_name: mongodb
     ports:
@@ -35,6 +35,50 @@ services:
       - ME_CONFIG_MONGODB_PORT=27017
       - ME_CONFIG_BASICAUTH_USERNAME=admin
       - ME_CONFIG_BASICAUTH_PASSWORD=password
+    networks:
+      - app_net
+
+  appointment-ms:
+    container_name: appointment-ms
+    #restart: always
+    image: sowmyasantoshi4/appointment-img
+    ports:
+      - 8082:8082 
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_PORT: 3306
+    depends_on:
+      - mysqldb
+    networks:
+      - app_net
+  
+  consultation-ms:
+    container_name: consultation-ms
+    #restart: always
+    image: sowmyasantoshi4/consultation-img
+    ports:
+      - 8083:8083 
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_PORT: 3306
+    depends_on:
+      - mysqldb
+    networks:
+      - app_net
+      
+  mysqldb: 
+    container_name: mysql-db
+    image: mysql
+    restart: always
+    volumes:
+      -  /home/user/Desktop/db:/var/lib/mysql
+    ports: 
+     - 3307:3306   
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: clinicappdb
+      MYSQL_USER: clinicappdb
+      MYSQL_PASSWORD: clinicappdb
     networks:
       - app_net
 

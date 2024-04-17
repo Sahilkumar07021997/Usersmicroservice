@@ -2,6 +2,7 @@ const User = require('../models/user');
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const axios = require('axios');
+const url = process.env.CONSULTATIONS_URL;
 //----------------------------------------------------------------//
 
 
@@ -9,7 +10,7 @@ const axios = require('axios');
 
 exports.listConsultations = catchAsyncErrors(async (req, res, next) => {
     try {
-        const response = await axios.get('http://localhost:8083/consultations/list');
+        const response = await axios.get(`${url}/consultations/list`);
 
         const consultations = response.data;
         res.status(200).json({ success: true, consultations });
@@ -27,7 +28,7 @@ exports.saveConsultations = catchAsyncErrors(async (req, res, next) => {
     try {
         const { appointmentId, prescription } = req.body;
  
-        const response = await axios.post(`http://localhost:8083/consultations/save`, {
+        const response = await axios.post(`${url}/consultations/save`, {
             appointmentId,
             prescription
         });
@@ -48,7 +49,7 @@ exports.saveFeedback = catchAsyncErrors(async (req, res, next) => {
     try {
         const { consultationId, rating, feedback } = req.body;
  
-        const response = await axios.post(`http://localhost:8083/consultations/feedback`, {
+        const response = await axios.post(`${url}/consultations/feedback`, {
             consultationId, rating, feedback
         });
 
@@ -67,7 +68,7 @@ exports.saveFeedback = catchAsyncErrors(async (req, res, next) => {
 exports.listAppConsultations = catchAsyncErrors(async (req, res, next) => {
     try {
 
-        const response = await axios.get(`http://localhost:8083/consultations/listAppConsultations`);
+        const response = await axios.get(`${url}/consultations/listAppConsultations`);
 
         const listAppConsultations = response.data;
         res.status(201).json({
