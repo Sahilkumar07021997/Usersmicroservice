@@ -1,6 +1,7 @@
 // this auth middleware is to protect Routes from unauthorized user! and only allows if it is authenticated
 const jwt= require("jsonwebtoken")
 const ErrorHandler = require("../utils/errorHandler");
+const errorHandler = require("../utils/errorHandlerFunction");
 const catchAsyncErrors = require("./catchAsyncErrors");
 const User = require("../models/user");
 
@@ -12,7 +13,7 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
 
     //console.log(token); getting JWTtoken from cookies!
     if (!token) {
-        return next(new ErrorHandler('Login first to access the resource',401))
+        return errorHandler(res, 'Login first to access the resource',401)
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -27,9 +28,7 @@ exports.authorizeRoles = (...roles) => {
     return (req, res, next) => {
         // console.log(req.user.role);
         if (!roles.includes(req.user.role)) {
-            return next(
-                new ErrorHandler(`Role ${req.user.role} is not authorized to access the resource`, 403)
-            );
+            return  errorHandler(res, `Role ${req.user.role} is not authorized to access the resource`, 403);
         }
         next();
     }

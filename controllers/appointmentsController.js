@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const ErrorHandler = require('../utils/errorHandler');
+const errorHandler = require('../utils/errorHandlerFunction');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const axios = require('axios');
 const url = process.env.APPOINTMENTS_URL;
@@ -16,7 +17,7 @@ exports.listAppointments = catchAsyncErrors(async (req, res, next) => {
         res.status(200).json({ success: true, appointments });
     } catch (error) {
         // Handle errors
-        return next(new ErrorHandler(error.response.data.message, error.response.status));
+        return errorHandler(res, error.response.data.message, error.response.status);
     }
 });
 
@@ -41,7 +42,7 @@ exports.saveAppointments = catchAsyncErrors(async (req, res, next) => {
         });
     } catch (error) {
         // Handle errors
-        return next(new ErrorHandler(error.response.data.message, error.response.status));
+        return errorHandler(res, error.response.data.message, error.response.status);
     }
 });
 

@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const ErrorHandler = require('../utils/errorHandler');
+const errorHandler = require('../utils/errorHandlerFunction');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const axios = require('axios');
 const url = process.env.CONSULTATIONS_URL;
@@ -16,7 +17,7 @@ exports.listConsultations = catchAsyncErrors(async (req, res, next) => {
         res.status(200).json({ success: true, consultations });
     } catch (error) {
         // Handle errors
-        return next(new ErrorHandler(error.response.data.message, error.response.status));
+        return errorHandler(res, error.response.data.message, error.response.status);
     }
 });
 
@@ -40,7 +41,7 @@ exports.saveConsultations = catchAsyncErrors(async (req, res, next) => {
         });
     } catch (error) {
         // Handle errors
-        return next(new ErrorHandler(error.response.data.message, error.response.status));
+        return errorHandler(res, error.response.data.message, error.response.status);
     }
 });
 
@@ -60,7 +61,7 @@ exports.saveFeedback = catchAsyncErrors(async (req, res, next) => {
         });
     } catch (error) {
         // Handle errors
-        return next(new ErrorHandler(error.response.data.message, error.response.status));
+        return errorHandler(res, error.response.data.message, error.response.status);
     }
 });
 
@@ -77,7 +78,7 @@ exports.listAppConsultations = catchAsyncErrors(async (req, res, next) => {
         });
     } catch (error) {
         // Handle errors
-        return next(new ErrorHandler(error.response.data.message, error.response.status));
+        return errorHandler(res, error.response.data.message, error.response.status);
     }
 });
 

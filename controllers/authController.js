@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const ErrorHandler = require('../utils/errorHandler');
+const errorHandler = require('../utils/errorHandlerFunction');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
@@ -22,7 +22,8 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     
         sendToken(user, 200, res);
     } catch (error) {
-       return next (new ErrorHandler(error,500))
+        console.log(error);
+       return errorHandler(res,error,500)
     }
     
 }) 
@@ -34,20 +35,20 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
     //check is email and password is enteres by user
     if (!email || !password) {
-        return next(new ErrorHandler('please enter email id and password',400)); //bad request-400
+        return errorHandler(res,'please enter email id and password',400); //bad request-400
     }
 
     //finding user in DB and and responding to client request
     const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
-        return next(new ErrorHandler('invalid email or password',401));
+        return errorHandler(res,'invalid email or password',401);
     }
 
     //checking if entered password is correct or not
     const isPasswordMatch = await user.comparePassword(password);
     if (!isPasswordMatch) {
-        return next(new ErrorHandler('incorrect password', 401));
+        return errorHandler(res,'incorrect password', 401);
         //unauthorized user-401
     }
 
@@ -60,7 +61,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
      
     if (!user) {
-        return next(new ErrorHandler('User not found with this email',404));
+        return errorHandler(res,'User not found with this email',404);
     }
 
     //if it exist then get the reset token
@@ -93,7 +94,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
         await user.save({ validateBeforeSave: false });
 
-        return next(new ErrorHandler(error.message,500));
+        return errorHandler(res,error.message,500);
     }
     
 })
@@ -111,12 +112,12 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
         resetPasswordExpire: { $gt: Date.now() },
     })
     if (!user) {
-        return next(new ErrorHandler('Reset password token is invalid or expired!',400))
+        return errorHandler(res,'Reset password token is invalid or expired!',400)
     }
 
     //if user entered wrong password then
     if (req.body.password !== req.body.password) {
-        return next(new ErrorHandler('Password does not match😑',400))
+        return errorHandler(res,'Password does not match😑',400)
     }
 
     //if password entered is correct then just replace the password in User.schema with the password entered by the user now!
@@ -133,12 +134,17 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 })
 // get currently logged in user's profile details => /api/v1/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
-    const user = await User.findById(req.user.id);
+    try {
+      const user = await User.findById(req.user.id);
 
-    res.status(200).json({
+      res.status(200).json({
         success: true,
-        user
-    })
+        user,
+      });
+    } catch (error) {
+        return errorHandler(res,'login First to check user profile',404);
+    }
+    
 })
 
 // Update/change user Password => /api/v1/password/update
@@ -148,7 +154,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
     //check previous user password entered by user
     const isMatched = await user.comparePassword(req.body.oldPassword);
     if (!isMatched) {
-        return next(new ErrorHandler('Old password is incorrect',404));
+        return errorHandler(res,'Old password is incorrect',404);
     }
 
     user.password = req.body.password;
@@ -225,7 +231,7 @@ exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-        return next(new ErrorHandler(`user does not found with id: ${req.params.id} 😑`),404);
+        return errorHandler(res,`user does not found with id: ${req.params.id} 😑`,404);
     }
 
     res.status(200).json({
@@ -261,7 +267,7 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
     var name = user.get('name');
     
     if (!user) {
-        return next(new ErrorHandler(`user does not found with id: ${req.params.id} 😑`),404);
+        return errorHandler(res,`user does not found with id: ${req.params.id} 😑`,404);
     }
      //also remove the avatar from the cloudinary TODO
     

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const MONGODB_URI = `mongodb://mongodb:27017/ClinicAppointmentSystem`; // Update to use the service name of the MongoDB container
+//const MONGODB_URI = process.env.DB_LOCAL_URI;  //localURI
 
 const connectDatabase = () => {
   mongoose.set("strictQuery", false); // Used to avoid one warning
